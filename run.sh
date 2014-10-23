@@ -3,7 +3,7 @@
 set -x
 
 TULEAP_INSTALL_TIME="false"
-if [ ! -f /data/etc/tuleap/conf/local.inc ]; then
+if [ ! -f /data/etc/codendi/conf/local.inc ]; then
     TULEAP_INSTALL_TIME="true"
 
     # If tuleap directory is not in data, assume it's first boot and move
@@ -38,6 +38,6 @@ if [ "$TULEAP_INSTALL_TIME" == "false" ]; then
 fi
 
 # Activate backend/crontab
-/etc/init.d/tuleap start
+#/etc/init.d/codendi start
 
-exec supervisord -n
+#exec supervisord -n

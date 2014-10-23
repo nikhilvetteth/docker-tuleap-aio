@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -e
+set -ex
 
 function generate_passwd {
    cat /dev/urandom | tr -dc "a-zA-Z0-9" | fold -w 15 | head -1
@@ -18,21 +18,21 @@ mv /var/lib/mysql /data/lib && ln -s /data/lib/mysql mysql
 [ -d /var/lib/gitolite ] && mv /var/lib/gitolite /data/lib && ln -s /data/lib/gitolite gitolite
 popd > /dev/null
 
-# Apply tuleap patches (should be temporary until integrated upstream)
+# Apply codendi patches (should be temporary until integrated upstream)
 pushd . > /dev/null
-cd /usr/share/tuleap
+cd /usr/share/codendi
 /bin/ls /root/app/patches/*.patch | while read patch; do
     patch -p1 -i $patch
 done
 popd > /dev/null
 
-# Install Tuleap
-bash ./setup.sh --disable-selinux --sys-default-domain=$VIRTUAL_HOST --sys-org-name=Tuleap --sys-long-org-name=Tuleap
+# Install codendi
+bash ./setup.sh --disable-selinux --sys-default-domain=$VIRTUAL_HOST --sys-org-name=tuleap --sys-long-org-name=tuleap
 
 # Setting root password
 root_passwd=$(generate_passwd)
 echo "root:$root_passwd" |chpasswd
-echo "root: $root_passwd" >> /root/.tuleap_passwd
+echo "root: $root_passwd" >> /root/.codendi_passwd
 
 # Place for post install stuff
 ./boot-postinstall.sh
@@ -41,7 +41,7 @@ echo "root: $root_passwd" >> /root/.tuleap_passwd
 touch /etc/aliases.codendi
 
 # Ensure system will be synchronized ASAP
-/usr/share/tuleap/src/utils/php-launcher.sh /usr/share/tuleap/src/utils/launch_system_check.php
+/usr/share/codendi/src/utils/php-launcher.sh /usr/share/codendi/src/utils/launch_system_check.php
 
 service mysqld stop
 service httpd stop
@@ -52,7 +52,7 @@ service crond stop
 # Conf
 mv /etc/httpd/conf            /data/etc/httpd
 mv /etc/httpd/conf.d          /data/etc/httpd
-mv /etc/tuleap                /data/etc
+mv /etc/codendi                /data/etc
 mv /etc/aliases               /data/etc
 mv /etc/aliases.codendi       /data/etc
 mv /etc/logrotate.d/httpd     /data/etc/logrotate.d
@@ -62,15 +62,15 @@ mv /etc/my.cnf                /data/etc
 mv /etc/nsswitch.conf         /data/etc
 mv /etc/crontab               /data/etc
 mv /etc/passwd                /data/etc
-mv /etc/shadow                /data/etc
+mv /etc/shadow                /data/etc || true
 mv /etc/group                 /data/etc
-mv /root/.tuleap_passwd       /data/root
+mv /root/.codendi_passwd       /data/root || true
 
 # Data
 mv /home/codendiadm /data/home
 mv /home/groups    /data/home
 mv /home/users     /data/home
-mv /var/lib/tuleap /data/lib
+mv /var/lib/codendi /data/lib
 
 # Will be restored by boot-fixpath.sh later
 [ -h /var/lib/mysql ] && rm /var/lib/mysql
