@@ -38,6 +38,6 @@ if [ "$TULEAP_INSTALL_TIME" == "false" ]; then
 fi
 
 # Activate backend/crontab
-#/etc/init.d/codendi start
+/etc/init.d/codendi start
 
-#exec supervisord -n
+exec supervisord -n

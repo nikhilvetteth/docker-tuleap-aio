@@ -7,29 +7,35 @@ MAINTAINER Manuel Vacelet, manuel.vacelet@enalean.com
 
 RUN rpm -i http://mir01.syntis.net/epel/5/i386/epel-release-5-4.noarch.rpm
 
-RUN yum install -y mysql-server; yum clean all
+RUN yum install -y \
+    openssh-server \
+    php53 \
+    php53-common \
+    rsyslog \
+    mysql-server \
+    postfix \
+    which \
+    python26; \
+    yum clean all
 
-RUN yum install -y openssh-server; yum clean all
 RUN echo "NETWORKING=yes" > /etc/sysconfig/network
-RUN yum install -y php53 php53-common
 ADD Tuleap.repo /etc/yum.repos.d/
-ADD rpms /rpms
-RUN yum install -y sudo; yum clean all
 
-# RUN cd /rpms && /sbin/service sshd start && yum install -y --nogpgcheck *.rpm
-RUN yum install -y tuleap-install; yum clean all
-RUN yum install -y tuleap-core-subversion; yum clean all
-RUN yum install -y tuleap-plugin-agiledashboard; yum clean all
-RUN yum install -y tuleap-plugin-hudson; yum clean all
-RUN yum install -y tuleap-theme-flamingparrot; yum clean all
-RUN yum install -y tuleap-plugin-graphontrackers; yum clean all
-RUN yum install -y tuleap-customization-default; yum clean all
-RUN yum install -y tuleap-documentation; yum clean all
-RUN yum install -y restler-api-explorer; yum clean all
+RUN /sbin/service sshd start && yum install -y \
+    sudo \
+    tuleap-install \
+    tuleap-core-subversion \
+    tuleap-core-cvs \
+    tuleap-plugin-agiledashboard \
+    tuleap-plugin-hudson \
+    tuleap-theme-flamingparrot \
+    tuleap-plugin-graphontrackers \
+    tuleap-plugin-git \
+    tuleap-customization-default \
+    tuleap-documentation \
+    yum clean all
 
-RUN /sbin/service sshd start && yum install -y tuleap-plugin-git; yum clean all
-
-RUN yum install -y rsyslog; yum clean all
+RUN curl -O https://bootstrap.pypa.io/get-pip.py && python26 get-pip.py && pip2.6 install supervisor && rm -f get-pip.py
 
 ADD supervisord.conf /etc/supervisord.conf
 
