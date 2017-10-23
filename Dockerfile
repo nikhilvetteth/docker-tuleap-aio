@@ -1,7 +1,5 @@
 ## Tuleap All In One ##
-FROM centos:centos6
-
-MAINTAINER Manuel Vacelet, manuel.vacelet@enalean.com
+FROM centos:6
 
 COPY Tuleap.repo /etc/yum.repos.d/
 
@@ -39,6 +37,18 @@ RUN sed -i '/session    required     pam_loginuid.so/c\#session    required     
     rpm --rebuilddb && \
     yum install -y \
     tuleap-install-9.13 \
+    rh-php56-php-gd \
+    rh-php56-php-pear \
+    rh-php56-php-soap \
+    rh-php56-php-mysqlnd \
+    rh-php56-php-xml \
+    rh-php56-php-mbstring \
+    rh-php56-php-cli \
+    rh-php56-php-opcache \
+    rh-php56-php-process \
+    rh-php56-php-pdo \
+    rh-php56-php-ldap \
+    rh-php56-php-intl \
     tuleap-core-cvs \
     tuleap-core-subversion \
     tuleap-plugin-agiledashboard \
@@ -58,6 +68,10 @@ RUN sed -i '/session    required     pam_loginuid.so/c\#session    required     
     rm -f /home/codendiadm/.ssh/id_rsa_gl-adm* /var/lib/gitolite/.ssh/authorized_keys
 
 COPY supervisord.conf /etc/supervisord.conf
+
+RUN yum install -y \
+    rh-php56-php-fpm \
+    nginx
 
 COPY . /root/app
 
