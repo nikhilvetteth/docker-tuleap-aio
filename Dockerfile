@@ -49,8 +49,9 @@ RUN sed -i '/session    required     pam_loginuid.so/c\#session    required     
     rh-php56-php-pdo \
     rh-php56-php-ldap \
     rh-php56-php-intl \
-    tuleap-core-cvs \
-    tuleap-core-subversion \
+    rh-php56-php-fpm \
+    nginx \
+    tuleap-plugin-svn \
     tuleap-plugin-agiledashboard \
     tuleap-plugin-hudson \
     tuleap-plugin-git-gitolite3 \
@@ -67,18 +68,8 @@ RUN sed -i '/session    required     pam_loginuid.so/c\#session    required     
     rm -f /etc/ssl/certs/localhost.crt /etc/pki/tls/private/localhost.key && \
     rm -f /home/codendiadm/.ssh/id_rsa_gl-adm* /var/lib/gitolite/.ssh/authorized_keys
 
-COPY supervisord.conf /etc/supervisord.conf
-
-RUN yum install -y \
-    rh-php56-php-fpm \
-    nginx
-
-COPY . /root/app
-
-WORKDIR /root/app
-
 VOLUME [ "/data" ]
 
 EXPOSE 22 80 443
 
-CMD ["/root/app/run.sh"]
+CMD ["/usr/share/tuleap/tools/docker/tuleap-aio/run.sh"]
