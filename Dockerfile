@@ -36,21 +36,7 @@ RUN sed -i '/session    required     pam_loginuid.so/c\#session    required     
     /sbin/service sshd start && \
     rpm --rebuilddb && \
     yum install -y \
-    tuleap-install-9.13 \
-    rh-php56-php-gd \
-    rh-php56-php-pear \
-    rh-php56-php-soap \
-    rh-php56-php-mysqlnd \
-    rh-php56-php-xml \
-    rh-php56-php-mbstring \
-    rh-php56-php-cli \
-    rh-php56-php-opcache \
-    rh-php56-php-process \
-    rh-php56-php-pdo \
-    rh-php56-php-ldap \
-    rh-php56-php-intl \
-    rh-php56-php-fpm \
-    nginx \
+    tuleap-install \
     tuleap-plugin-svn \
     tuleap-plugin-agiledashboard \
     tuleap-plugin-hudson \
